@@ -1,0 +1,29 @@
+
+\documentclass[12pt]{article}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\begin{document}
+
+\title{Assignment 2}
+\author{Darwin Ding}
+\maketitle
+
+\section*{Exercise 1.8}
+The probability of picking a marble out of the bag and getting red is 0.9, and we are looking for the probability that we sample 10 random marbles and get 1 or 0 red marbles.
+
+The probability of getting 0 red marbles is $(.1)^{10} = 10^{-10}$, and the probability of getting 1 red marble is $(.1)^9 * .9 * 10$, because we pulled 9 green marbles (with probability .1) and 1 red marble (probability .9), and there were 10 ways to do that.
+
+The probability of doing either of those things is the sum of those two probabilities is $\boldsymbol{9.1 * 10^{-9}}$
+
+\section*{Exercise 1.9}
+Using Hoeffding's Inequality, $\mu = .9$. Since we're looking for $v \le .1$, $\epsilon \ge .9 - .1 = .8$. By definition, also, $N = 10$.
+
+\begin{gather*}
+P[|v - \mu| \ge \epsilon] \le 2e^{-2\epsilon^{2}N}
+\\ \le 2e^{-2 * .8^2 * 10}
+\\ \le \boldsymbol{5.52 * 10^{-6}}
+\end{gather*}
+\end{document}
