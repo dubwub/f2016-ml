@@ -43,7 +43,7 @@ P[|v - \mu| \ge \epsilon] \le 2e^{-2\epsilon^{2}N}
 	\item No, not necessarily. If $p = 0.5$, then even if $E_{in}$ is approximately equal to $E_{out}$, $E_{in} = 0.5$ which is just as good as random.
 	\item Yes. Just because the smart algorithm has the smallest in-sample error (even if it's 0) doesn't mean there's a chance that the out-of-sample data is completely different from the in-sample. In this case, all of the points out of D might be -1, and the crazy learning algorithm will have worked better.
 	\item If $p = 0.9$, S will pick the "correct" hypothesis unless $E_{in}(h_1) > 0.5$. The probability of that is the probability that $\epsilon > .4$ ($E_{out}(h_1) = .1$). M = 2, so this probability is bounded by $2 * 2 * e^{-2\epsilon^2N}$ = .0013. Therefore the probability that S correctly hypothesizes from the set is at least 1 - .0013 = \textbf{0.99866}
-	\item For any p, $E_in(h_1) = 1 - p$. Without loss of generality, let's assue that $p > 0.5$ (this could all be flipped and applied to the opposite case). $E_out(h_1)$ needs to be greater than 0.5 with probability greater than 0.5 for this to be true.
+	\item For any p, $E_{in}(h_1) = 1 - p$. $E_{out}(h_1)$ needs to be on the opposite 'side' of $E_{in}$ with probability greater than 0.5 for the C algorithm to work. In other words, $|E_{out} - E_{in}| > \epsilon$, and $\epsilon = |p - 0.5|$.
 	\\ \\ Solving for $2 * 2 * e^{-2(p - 0.5)^2*25} > 0.5$ gets us \textbf{0.296 $<$ p $<$ 0.704}
 \end{enumerate}
 
