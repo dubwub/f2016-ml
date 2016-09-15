@@ -16,7 +16,7 @@ The probability of picking a marble out of the bag and getting red is 0.9, and w
 
 The probability of getting 0 red marbles is $(.1)^{10} = 10^{-10}$, and the probability of getting 1 red marble is $(.1)^9 * .9 * 10$, because we pulled 9 green marbles (with probability .1) and 1 red marble (probability .9), and there were 10 ways to do that.
 
-The probability of doing either of those things is the sum of those two probabilities is $\boldsymbol{9.1 * 10^{-9}}$
+The probability of doing either of those things is the sum of those two probabilities $= \boldsymbol{9.1 * 10^{-9}}$
 
 \section*{Exercise 1.9}
 Using Hoeffding's Inequality, $\mu = .9$. Since we're looking for $v \le .1$, $\epsilon \ge .9 - .1 = .8$. By definition, also, $N = 10$.
@@ -35,7 +35,7 @@ P[|v - \mu| \ge \epsilon] \le 2e^{-2\epsilon^{2}N}
 	\item \includegraphics[scale=.5]{1-10-2.png}
 	\\ Again, the top graph is of $v_0$, the middle graph is $v_{rand}$, and the bottom one is $v_{min}$. The green lines are the calculated estimates, and the blue lines are the plotted Hoeffding bounds.
 	\item $v_0$ and $v_{rand}$ both obey the Hoeffding bound, while $v_{min}$ does not. This makes sense, because $v_0$ and $v_{rand}$ are essentially randomly selected coins. There's nothing special about the first coin or any random particular coin. The problem arises when you specifically seek out the minimum coin and then try to retroactively perform the Hoeffding bound. Hoeffding's inequality doesn't support this.
-	\item If we pretend we don't know the true nature of coin flipping, and that $\mu$ is unknown to us, this problem is very similar to the bins problem. Let's say we are trying to predict $\mu$ using our data (the experiments we've performed and their results), and our hypothesis set is $[v_0, v_{rand}, v_{min}]$.
+	\item If we pretend we don't know the true nature of coin flipping, and that $\mu$ is unknown to us, this problem is very similar to the bins problem. Let's say we are trying to predict $\mu$ using our data (the experiments we've performed and their results), and our hypothesis set is all 1000 coins. We then pick out the bins for $[v_0, v_{rand}, v_{min}]$ just to see how well they performed. We have some floating theoretical target function that has $\mu = 0.5$, red/green marbles represent heads/tails, and we're trying to find the true $\mu$.
 	\\ \\ If we fix our hypothesis set and then perform the experiment, we find that the Hoeffding bounds work simply because they work for $[v_0, v_{rand}]$. We cannot, however, claim that the bounds don't work simply because they retroactively don't work for $v_{min}$.
 \end{enumerate}
 
@@ -59,7 +59,8 @@ The best you can provide is \textbf{(c)}. Depending on the problem, you may need
 		w^T(t)w^* = w^{*T}(w(t-1) + x(m)y(m))
 		\\ = w^{*T}w(t-1) + w^{*T}x(m)y(m)
 	\end{gather*}
-	$w^{*T}x(m)y(m)$ is positive for all n, so $w^{*T}x(m)y(m) \ge \rho$, since $\rho$ is the smallest in magnitude of all such n. Therefore, $w^T(t)w^* = w^{*T}w(t-1) + w^{*T}x(m)y(m) \ge w^{*T}w(t-1) + \rho$.
+	$w^{*T}x(m)y(m)$ is positive for all n, so $w^{*T}x(m)y(m) \ge \rho$, since $\rho$ is the smallest in magnitude of $w^{*T}x(n)y(n)$ for all n.
+	\\ \\ Therefore, $w^T(t)w^* = w^{*T}w(t-1) + w^{*T}x(m)y(m) \ge w^{*T}w(t-1) + \rho$.
 	\\ \\ \textbf{Base Case}
 	\\ At t = 0, $w^T(t)$ is a vector of all 0s, and so both sides of the inequality are equal at 0.
 	\\ \\ \textbf{Inductive Case}
@@ -89,7 +90,7 @@ The best you can provide is \textbf{(c)}. Depending on the problem, you may need
 	\end{gather*}
 	Multiplying these two inequalities together, we find that $w^T(t)w^*/||w(t)|| \ge t\rho/(\sqrt{t}R) = \sqrt{t}\rho/R$. Squaring both sides, we get:
 	\begin{gather*}
-		w^T(t)w^*/||w(t)|| \ge t\rho/(\sqrt{t}R) = \sqrt{t}\rho/R
+		w^T(t)w^*/||w(t)|| \ge \sqrt{t}\rho/R
 		\\ (w^T(t) * w^*)^2/||w(t)||^2 \ge t\rho^2/R^2
 		\\ \frac{R^2(w^T(t) * w^*)^2}{\rho^2||w(t)||^2} \ge t
 	\end{gather*}
