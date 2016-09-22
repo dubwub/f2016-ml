@@ -105,7 +105,22 @@ Since the VC dimension is pretty much defined as the break point $k-1$:
 \end{enumerate}
 \section*{Exercise 2.6}
 \begin{enumerate}[label=(\alph*)]
-	\item Our error bar function is $E_{out}(g) \le E_{in}(g) + \sqrt{\frac{1}{2N}log\frac{2|H|}{\delta}}$. With the same size hypothesis set (H = 1000 for both), and $\delta$ being the same for both (0.05), the lower N for $E_{test}$ means that it has a lower error bar. However, the lower N also means that $E_{test}$ might be more wild.
-	\item By having a larger test set, you will have less examples used for your actual training set. As a result, $E_{test} \approx E_{out}$ but $E_{test}$ has no guarantees of lowness.
+	\item Our error bar function for $E_{in}$ is:
+	\begin{gather*}
+		E_{out}(g) \le E_{in}(g) + \sqrt{\frac{1}{2N}log\frac{2|H|}{\delta}}
+		\\ = E_{in} + \boldsymbol{.115}
+	\end{gather*}
+	with $\delta = 1000$, $N = 400$ and $H = 1000$.
+	\\ \\ For $E_{test}$, you can, however, use Hoeffding's inequality for a single fixed hypothesis because the result of our small test set error result will fit the criterion. Here we actually have our error tolerance (again, 0.05) and we're trying to find our error bar (in this case, $\epsilon$).
+	\begin{gather*}
+		P[E_{in} - E_{out} \ge \epsilon] \le 2e^{-2N\epsilon^2}
+		\\ 0.05 \le 2e^{-400\epsilon^2}
+		\\ ln(.05/2) \le -400\epsilon^2
+		\\ \frac{ln(.05/2)}{-400} \ge \epsilon^2
+		\\ \sqrt{\frac{ln(.05/2)}{-400}} \ge \epsilon
+		\\ \boldsymbol{.096} \ge \epsilon 
+	\end{gather*}
+	The error bar for $E_{test}$ is smaller than that of $E_{in}$. It would only get smaller with a larger N (test set size), as well.
+	\item By having a larger test set, you will have less examples used for your actual training set. As a result, $E_{test} \approx E_{out}$ but $E_{test}$ might go wild.
 \end{enumerate}
 \end{document}
