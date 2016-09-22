@@ -62,6 +62,50 @@ We want to create an $E_{in}$ function where all the above categories are weight
 		\frac{dE_{in}(h)}{dh} = \frac{|h - y_1|}{h - y_1} + \frac{|h - y_2|}{h - y_2} + \frac{|h - y_3|}{h - y_3} + ... + \frac{|h - y_N|}{h - y_N}
 	\end{gather*}
 	Each of the fractions above has value either +1 (if $x - y_n > 0$)or -1 (if $x - y_n < 0$). In order to get to zero, half of the values have to be above h and half the values need to be below h.
-	\item As $y_N$ approaches positive infinity, $h_{mean}$ grows more and more as its sum increases, despite $y_N$ being an outlier. However, $h_{median}$ is not affected due to the nature of medians naturally ignoring outliers.
+	\item As $y_N$ approaches positive infinity, $h_{mean}$ grows more and more as its sum increases, despite $y_N$ being an outlier. However, $h_{median}$ is not affected much at all due to the nature of medians naturally ignoring outliers. $h_{median}$ may change, however, just due to the fact that if $y_N$ used to be below the median and then became positive infinity, the median may increase by a point.
+\end{enumerate}
+
+\section*{Exercise 2.1}
+\begin{enumerate}[label=(\alph*)]
+	\item Positive rays get broken really early on. At N = 0, you can put the ray anywhere and it'll make sense. At N = 1, putting the ray is still trivial. If the one point is +1, start the ray to the point's left. Otherwise, start it at its right.
+	\\ \\ However, at N = 2 things get a little trickier. No matter where you put the two points on the number line, if the one on the left is +1 and the one on the right is -1, there is no possible way to positive ray the line. However, it is pretty trivial to ray the other 3 dichotomies. Since $3 < 4 = 2^2$, N = \textbf{2 is a break point for the positive rays}.
+	\\ \\ This coincides with the growth function derived in the question, as $m_H(N) = N + 1 < 2^N$ for $N >= 2$.
+	\item Positive intervals also get broken pretty quickly. N = 0 is again trivial. N = 1 is also pretty trivial, you simply surround the point if it is +1, or avoid it if it is -1. For N = 2, it is still pretty easy to interval the points. For two -1s, simply avoid both points. For one +1 and one -1, you just interval tightly around the +1. For two +1s, the interval just needs to hold both points.
+	\\ \\ However, at N = 3, you can no longer interval the points consistently. You can interval all of the dichotomies pretty easily until you run into [+1, -1, +1]. Unfortunately, any interval that contains all the +1s here will by definition contain the -1 in the middle, which breaks the rule. Therefore N = \textbf{3 is a break point for positive intervals}.
+	\\ \\ This is in accordance with the growth function derived, as $m_H(2) = \binom{2+1}{2} + 1 = 3 + 1 = 2^2$, but $m_H(3) = \binom{3+1}{2} + 1 = 7 < 8 = 2^3$.
+	\item Convex sets are, as the growth formula implies, impossible to break. If you adhere to the strong strategy of placing all of the points equidistant around a circle, no two lines connecting any of those points can ever leave the set. Because this axiom about points on a circle never really ends, \textbf{there is no break point for convex sets}.
+	\\ \\ This doesn't really need to be verified because $2^N = 2^N$ for all N.
+\end{enumerate}
+\section*{Exercise 2.2}
+\begin{enumerate}[label=(\alph*)]
+	\item 
+	\begin{enumerate}
+		\item Positive rays broke at k = 2, so we can plug this into the bound and compare to the calculated growth function:
+		\begin{gather*}
+			m_H(N) = N + 1 \le \binom{N}{0} + \binom{N}{1} = 1 + N
+		\end{gather*}
+		Clearly, this holds.
+		\item Positive intervals broke at k = 3, so plugging that into the bound and comparing to the growth function given:
+		\begin{gather*}
+			m_H(N) = .5N^2 + .5N + 1 \le \binom{N}{0} + \binom{N}{1} + \binom{N}{2} 
+			\\ = 1 + N + N(N-1)/2
+			\\ = 1 + N + .5N^2 - N/2
+			\\ = 1 + .5N + .5N^2
+		\end{gather*}
+		Clearly, this also holds.
+		\item We cannot apply this bound here, because $m_H(N) = 2^N$ for all N. Convex sets did not break.
+	\end{enumerate}
+\end{enumerate}
+\section*{Exercise 2.3}
+Since the VC dimension is pretty much defined as the break point $k-1$:
+\begin{enumerate}[label=(\alph*)]
+	\item Positive rays broke at k = 2, so the VC dimension is \textbf{1}
+	\item Positive intervals broke at k = 3, so the VC dimension is \textbf{2}
+	\item Convex sets did not break, so the VC dimension is $\boldsymbol{\infty}$
+\end{enumerate}
+\section*{Exercise 2.6}
+\begin{enumerate}[label=(\alph*)]
+	\item Our error bar function is $E_{out}(g) \le E_{in}(g) + \sqrt{\frac{1}{2N}log\frac{2|H|}{\delta}}$. With the same size hypothesis set (H = 1000 for both), and $\delta$ being the same for both (0.05), the lower N for $E_{test}$ means that it has a lower error bar. However, the lower N also means that $E_{test}$ might be more wild.
+	\item By having a larger test set, you will have less examples used for your actual training set. As a result, $E_{test} \approx E_{out}$ but $E_{test}$ has no guarantees of lowness.
 \end{enumerate}
 \end{document}
