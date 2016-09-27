@@ -1,0 +1,49 @@
+
+\documentclass[12pt]{article}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\begin{document}
+
+\title{Assignment 4}
+\author{Darwin Ding}
+\maketitle
+
+\section*{Exercise 2.4}
+\begin{enumerate}[label=(\alph*)]
+	\item Back in chapter 1, we defined $h(x) = sign(w^Tx)$. We dealt with 2d space in chapter 1, but the math still applies to d+1 dimensional space. Our perceptron is a vector of size d+1, which represents a hyperplane in d+1 dimensional space.
+	\\ \\ The question can be reworded to, given any vector y of d+1 points:
+	\begin{gather*}
+		y = [\pm1, \pm1, \pm1, ...]
+	\end{gather*}
+	... and a d+1 by d+1 matrix X that represents d+1 points with d+1 dimensions each, can we generate a perceptron w (vector of size d+1) such that:
+	\begin{gather*}
+		y = Xw
+	\end{gather*}
+	And in fact, this is quite straightforward to do. It is quite easy to create a d+1 by d+1 non-singular matrix, even if we require all 0th dimensions of our points to be 1 (see Chapter 1).
+	\\ \\ Simply see the following matrix, where all the lines are linearly independent:
+	\begin{gather*}
+		\begin{bmatrix}
+		1 & 0 & 0 & 0 & \dots  & 0 \\
+		1 & 1 & 0 & 0 & \dots  & 0 \\
+		1 & 0 & 1 & 0 & \dots  & 0 \\
+		1 & 0 & 0 & 1 & \dots  & 0 \\
+		\vdots & \vdots & \vdots & \ddots & \vdots \\
+		1 & 1 & 1 & 1 & \dots  & 1
+		\end{bmatrix}
+	\end{gather*}
+	Due to its non-singularity, $X^{-1}$ exists and we can simply set $w = X^{-1}y$. Because we can do this with at least one example using a non-singular matrix, we have shattered d+1 for perceptrons. $\boldsymbol{d_{VC} \ge d + 1}$
+	\item However, things change when you add the next point. When you have more points than dimensions, linear independence is impossible. Mathematically speaking, this means:
+	\begin{gather*}
+		x_{d+2} = \sum^{d+1}_{i = 1}a_ix_i
+		\\ \implies y_{d+2} = sign(w^Tx_{d+2}) 
+		\\ = sign(\sum^{d+1}_{i = 1}a_iw^Tx_i)
+	\end{gather*}
+	However the fact that we can now mathematically derive the sign of the d+2nd point based off of the other d+1 points shows a glaring hole in the dichotomies that we can implement.
+	\\ \\ Namely, for each point i from 1 to d+1, let's assign it +1 if $a_i > 0$, and -1 if $a_i < 0$. It doesn't matter so much if $a_i = 0$, but not all $a_i$ can be 0 due to the linear dependence of point d+2.
+	\\ \\ Simplifying the above, we have $y_i = w^Tx_i$, and $a_iw^Tx_i = +a_i$ when $a_i > 0$, and $a_iw^Tx_i = -a_i$ when $a_i < 0$.
+	\\ \\ As a result, $\sum^{d+1}_{i = 1}a_iw^Tx_i$ will always be positive! Therefore, if the d+2nd point is assigned the value -1, the dichotomy cannot be implemented. Therefore, d+2 cannot be shattered, because this process can be done with any set of d+2 points.
+\end{enumerate}
+\end{document}
