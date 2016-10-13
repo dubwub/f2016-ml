@@ -80,12 +80,12 @@
 	\end{gather*}
 	But since we've figured out that $trace(H) = d+1$ from Exercise 3.3d, it will help to extract the diagonal values:
 	\begin{gather*}
-	\sum^{N-1}_{i=0}\epsilon_i^2H_{i,i} + \sum^{N-1}_{i,j=0; i \neq j}\epsilon_i\epsilon_jH_{i,j}
+	\sum^{N-1}_{i=0}\epsilon_i^2H_{i,i} + \sum^{N-1}_{i,j\ge0; i \neq j}\epsilon_i\epsilon_jH_{i,j}
 	\end{gather*}
 	From here, we can figure out the expected value with respect to D. First, note that $\sum^{N-1}_{i=0}H_{i,i} = trace(H) = d+1$. Secondly, note that while the expected value of $\epsilon_N^2 = \sigma^2$ for all N, the expected value of $\epsilon_N = 0$ for all N. Thus, we can simplify the expression:
 	\begin{gather*}
-	E[\sum^{N-1}_{i=0}\epsilon_i^2H_{i,i} + \sum^{N-1}_{i,j=0; i \neq j}\epsilon_i\epsilon_jH_{i,j}]
-	\\ = E[\sum^{N-1}_{i=0}\epsilon_i^2H_{i,i}] + E[\sum^{N-1}_{i,j=0; i \neq j}\epsilon_i\epsilon_jH_{i,j}]
+	E[\sum^{N-1}_{i=0}\epsilon_i^2H_{i,i} + \sum^{N-1}_{i,j\ge0; i \neq j}\epsilon_i\epsilon_jH_{i,j}]
+	\\ = E[\sum^{N-1}_{i=0}\epsilon_i^2H_{i,i}] + E[\sum^{N-1}_{i,j\ge0; i \neq j}\epsilon_i\epsilon_jH_{i,j}]
 	\\ = \sigma^2(d+1) + 0 = \sigma^2(d+1)
 	\end{gather*}
 	So this is the expected value of the matrix multiplication. There is an additional $\frac{1}{N}$ term that needs to be tacked on, but now we can finally combine everything:
@@ -94,8 +94,98 @@
 	\\ = \sigma^2 - \frac{1}{N}\sigma^2(d+1)
 	\\ = \boldsymbol{\sigma^2 (1 - \frac{d+1}{N})}
 	\end{gather*}
+	\item The in-sample estimate $\hat{y}$ was shown earlier in (a) to be $Xw^* + H\epsilon$. With new noise values following the same distribution, $y_{test} = Xw^* + \epsilon'$. From here we can calculate the in-test error:
+	\begin{gather*}
+		\hat{y} - y_{test} = H\epsilon - \epsilon'
+		\\ \implies E_{test}(w_{lin}) = \frac{1}{N}(H\epsilon - \epsilon')^T (H\epsilon - \epsilon')
+		\\ = \frac{1}{N}(\epsilon^TH^T - \epsilon^{\prime T})(H\epsilon - \epsilon')
+		\\ = \frac{1}{N}(\epsilon^TH^TH\epsilon - \epsilon^TH^T\epsilon' - \epsilon^{\prime T}H\epsilon + \epsilon^{\prime T}\epsilon')
+		\\ =  \frac{1}{N}(\epsilon^TH\epsilon - \epsilon^TH^T\epsilon' - \epsilon^{\prime T}H\epsilon + \epsilon^{\prime T}\epsilon')
+	\end{gather*}
+	... where the final step was achieved from using $H^2 = H$, which is given in the book. We can then use this for $E_{test}$.
+	\begin{gather*}
+		E_{test}(w_{lin}) = E[\frac{1}{N}(\epsilon^TH\epsilon - \epsilon^TH^T\epsilon' - \epsilon^{\prime T}H\epsilon + \epsilon^{\prime T}\epsilon')]
+		\\ = \frac{1}{N}E[\epsilon^TH\epsilon] - \frac{1}{N}E[\epsilon^TH^T\epsilon'] - \frac{1}{N}E[\epsilon^{\prime T}H\epsilon] + \frac{1}{N}E[\epsilon^{\prime T}\epsilon']
+	\end{gather*}
+	Here, there are four terms we can figure out separately though analysis. We're going to go from right to left, because of ease of analysis.
+	\begin{gather*}
+		\frac{1}{N}E[\epsilon^{\prime T}\epsilon']
+		\\ = \frac{1}{N}(N\sigma^2)
+		\\ = \sigma^2
+	\end{gather*}
+	This follows because $\epsilon'$ follows the same mean and variance as before.
+	\begin{gather*}
+		\frac{1}{N}E[\epsilon^{\prime T}H\epsilon]
+		\\ = \frac{1}{N}E[\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}\epsilon'_i\epsilon_jH_{i,j}]
+		\\ = \frac{1}{N}\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}E[\epsilon'_i\epsilon_jH_{i,j}]
+		\\ = \frac{1}{N}\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}E[\epsilon'_i]E[\epsilon_j]H_{i,j}
+		\\ = 0
+	\end{gather*}
+	This one is a little interesting, because we can separate the expected value into the product of its components. This is only doable because the selection of $\epsilon_i$ and $\epsilon'_i$ is completely independent despite them sharing mean and variance. And of course, H is determined solely by X and does not get affected by the noise and vice versa.
+	\begin{gather*}
+		\frac{1}{N}E[\epsilon^TH^T\epsilon']
+		\\ = \frac{1}{N}E[\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}\epsilon_i\epsilon'_jH^T_{i,j}]
+		\\ = \frac{1}{N}\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}E[\epsilon_i\epsilon'_jH^T_{i,j}]
+		\\ = \frac{1}{N}\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}E[\epsilon_i]E[\epsilon'_j]H^T_{i,j}
+		\\ = 0
+	\end{gather*}
+	And the same logic applies here! Finally:
+	\begin{gather*}
+		\frac{1}{N}E[\epsilon^TH\epsilon]
+		\\ = \frac{1}{N}E[\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}\epsilon_i\epsilon_jH^T_{i,j}]
+		\\ = \frac{1}{N}(E[\sum_{i=0}^{N-1}\epsilon_i^2H^T_{i,i}] + E[\sum_{i,j\ge0; i\neq j}^{N-1}\epsilon_i\epsilon_jH^T_{i,j}])
+		\\ = \frac{1}{N}(\sum_{i=0}^{N-1}E[\epsilon_i^2H^T_{i,i}] + \sum_{i,j\ge0; i\neq j}^{N-1}E[\epsilon_i\epsilon_jH^T_{i,j}])
+		\\ = \frac{1}{N}(\sum_{i=0}^{N-1}E[\epsilon_i^2]E[H^T_{i,i}] + \sum_{i,j\ge0; i\neq j}^{N-1}E[\epsilon_i]E[\epsilon_j]E[H^T_{i,j}])
+		\\ = \frac{1}{N}((d+1)\sigma^2 + 0)
+		\\ = \frac{(d+1)\sigma^2}{N}
+	\end{gather*}
+	The above works because picking $\epsilon_i$ and $\epsilon_j$ is independent if $i \neq j$. Also, in the first summation, the fact that we're adding up the diagonal of $H^T$ (since we're querying just $i,i$) means we can use $trace(H^T)$, which is equal to $trace(H)$ since transposing does not change the main diagonal of a matrix.
+	\\ \\ Finally, when we combine both non-zero components we get:
+	\begin{gather*}
+		\frac{(d+1)\sigma^2}{N} + \sigma^2 = \boldsymbol{(\sigma^2)(1 + \frac{d + 1}{N})}
+	\end{gather*}
 \end{enumerate}
-
-Problem 3.1a: 1137 iterations, .1195 slope + 15.274
-Problem 3.1b: really quick, .066376x + 16.3346
+\section*{Problem 3.1}
+\begin{enumerate}[label=(\alph*)]
+	\item \includegraphics[scale=.5]{3-1a.png}
+	\\ The above image is the display after running the PLA algorithm on 2000 generated points. It terminated after 1137 iterations, with output function $x_2 = .1195x_1 + 15.274$
+	\item \includegraphics[scale=.5]{3-1b.png}
+	\\ The above image is the display after running the linear regression algorithm described in the chapter on 2000 generated points. It runs extremely quickly with very high accuracy. Sometimes when running the PLA it would be very volatile in its termination time (see 3.2 below), but this algorithm was very consistently quick. Its output was $x_2 = .0664x_1 + 16.335$
+\end{enumerate}
+\section*{Problem 3.2}
+\includegraphics[scale=.5]{3-2.png}
+\\ The above image is the output after graphing sep (the vertical separation between the semicircles) versus the number of iterations PLA took to terminate. There isn't really any super visible trend, except for a mild inverse relationship between sep and iterations.
+\\ \\ Both of these things are expected. PLA is a somewhat volatile algorithm, because its performance can really hinge on which points it ends up picking to re-evaluate its weights on. However, the weak inverse relationship intuitively makes sense because as the sep gets bigger, there are more possible hypotheses that can separate the data.
+\\ \\ Meanwhile, the bound we proved back in problem 1.3e, where $t < \frac{R^2||w^*||^2}{\rho}$, doesn't really change that much. The norm of the optimal weight vector doesn't change very much, but R and $\rho$ both increase as sep increases. This is because as sep increases, the distance points get from the termination line increases. Both increase with a squared factor, so the bound will not shift too much.
+\section*{Problem 3.8}
+We can simplify the expression given in the problem as follows:
+\begin{gather*}
+	E_{out}(h) = E[(h(x) - y)^2]
+	\\ = h^2(x) - 2h(x)E[y|x] + E[y^2|x]
+	\\ \frac{dE_{out}}{dh(x)} = 2h(x) - 2E[y|x] = 0
+	\\ \implies \boldsymbol{h(x) = E[y|x]}
+\end{gather*}
+We can also show that $E[\epsilon(x)] = 0$ in the following way:
+\begin{gather*}
+	y = h^*(x) + \epsilon(x)
+	\\ E[y] = E[h^*(x) + \epsilon(x)]
+	\\ E[y] = E[h^*(x)] + E[\epsilon(x)]
+	\\ E[y] = h^*(x) \implies h^*(x) = h^*(x) + E[\epsilon(x)]
+	\\ \implies \boldsymbol{E[\epsilon(x)] = 0}
+\end{gather*}
+\section*{Extra Problem}
+\includegraphics[scale=.75]{extra.png}
+\\ \includegraphics[scale=.75]{extra2.png}
+\\ The above two graphs depict symmetry vs. intensity for the training and test data sets respectively.
+\\ \\ Symmetry was defined as the picture's symmetry about both the x-axis and the y-axis. Mathematically speaking, symmetry was calculated as (with $P[n]$ representing the nth index of the input grayscale image, i being column and j being row number of specific pixels):
+\begin{gather*}
+\sum_{0 \le i \le 7, 0 \le j \le 16}|P[16j + i] - P[16(j + 1) - (i + 1)]| + 
+\\ \sum_{0 \le i \le 16, 0 \le j \le 7}^{15}|P[16j + i] - P[(15 - j)*16 - i]
+\end{gather*}
+Essentially, images were penalized for having pixels that differed much in value from the corresponding pixel on the other side of either the y or x axis.
+\\ \\ Average intensity was done by taking the difference between each pixel and pure white (-1), summing and averaging everything. Mathematically, this turned out to be:
+\begin{gather*}
+\frac{1}{256}\sum_{0 \le i < 256}P[i] + 1
+\end{gather*}
+This turned out to have pretty decent performance. Unfortunately, there are a few clear outliers even if the main chunk of all the points are well separated.
 \end{document}
