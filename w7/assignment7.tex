@@ -51,7 +51,8 @@
 	 	\\ E_{out} \le E_{test} + .177
 	 	\\ E_{out} \le \boldsymbol{.265}
  	\end{gather*}
- 	\item I would most likely deliver the \textbf{linear model}. It's instructive to give the above error bars as an exercise, but in reality we cannot truly use Hoeffding bounds on the test set just because we've data snooped a lot. The fact that I can look at the error bar for the linear model test set and for the 3rd order polynomial test set and pick the latter means that my hypothesis set was of size two, not of size one.
+ 	\item I would most likely deliver the \textbf{first order model}. It's instructive to give the above error bars as an exercise, but in reality we cannot truly use Hoeffding bounds on the test set just because we've data snooped a lot. The fact that I can look at the error bar for the linear model test set and for the 3rd order polynomial test set and pick the latter means that my hypothesis set was of size two, not of size one.
+ 	\\ \\ Additionally, even with a slightly better $E_{in}$, we start running into the risk of possibly overfitting the data because this data is pretty well separable with the simplest model (the Occam's Razor argument).
 \end{enumerate}
 
 \section*{Problem 2}
