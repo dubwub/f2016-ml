@@ -20,41 +20,53 @@
 
 \section*{Exercise 6.2}
 \begin{enumerate}[label=(\alph*)]
-	\item First, the gradient descent function was set to have step size 0.01 and run for 50 iterations starting from $(0.1, 0.1)$. The following plot of iterations vs. $f(x)$ was created:
-	\\ \includegraphics[scale=.5]{2a1.png}
-	\\ The final algorithm outputted the point: $\boldsymbol{(-0.238, -0.238)}$ with a final $f(x)$ of $\boldsymbol{-3.88}$
-	\\ \\ Then, the step size was changed to 0.1 and rerun with the same number of iterations and starting point, creating the following plot:
-	\\ \includegraphics[scale=.5]{2a2.png}
-	\\ The final algorithm outputted the point: $\boldsymbol{(-0.0011, -0.0011)}$ with a final $f(x)$ of $\boldsymbol{3.28}$. This is clearly wildly wrong, especially considering it is pretty easy to come up with any number lower ($f(0, 0) = 0^2 + 0^2 + 2 sin(0) + 2 sin(0) = 0$, for instance). This happens because the step size is too large. The gradient descent algorithm sees a local gradient then overreacts by jumping all the way over to another part of the plot.
-	\item The gradient descent algorithm was then run on a variety of starting points with both step sizes (0.1, 0.01), and the final f(x)s are listed below in the table. Each time, the algorithm was run for 50 iterations.
-	\begin{center}
-		\begin{tabular}{| l | l | l |}
-			\hline
-			\textbf{Starting Pt} & $\eta = \boldsymbol{0.01}$ & $\eta = \boldsymbol{0.1}$ \\ \hline
-			$(0.1, 0.1)$ & $-3.88$ & $3.28$ \\ \hline
-			$(1, 1)$ & $-2.88$ & $-0.5$ \\ \hline
-			$(-0.5, -0.5)$ & $-3.88$ & $-3.43$ \\ \hline
-			$(-1, -1)$ & $-0.88$ & $3.88$ \\
-			\hline
-		\end{tabular}
-	\end{center}
-	Clearly this is all over the place, and the only reason we know that $-3.88$ is probably the lowest is because we were lucky earlier in choosing starting points.
+	\item If f(x) returns +1 (which will happen with probability $\pi(x)$, where $pi(x) \ge 0.5$) but the correct classification was -1, we've committed an error. Similarly, if we return -1 (which happens with probability $\pi(x)$, where $\pi(x) \le 0.5$) but the correct classification was +1, we've committed an error.
+	
+	The former case happens by definition with probability $1 - \pi(x) \le 0.5$, and the latter case happens by definition with probability $\pi(x) \le 0.5$. Because of the definition of f(x), we will always select the classification that $\pi(x)$ leans towards. One of $\pi(x)$ and $1 - \pi(x)$ will be less than 0.5 and the other will be greater, and so the error can only be the minimum of the two.
+	\item This is by definition the best behavior we can have, because in each case we select the option that has the least probability of error. If we create any other hypothesis that disagrees on a certain point, we are by definition selecting the option that has the higher probability of error.
+	
+	For instance, if $\pi(x) < 0.5$ (if $\pi(x) = 0.5$ there isn't any real difference between which class we select), f(x) will output -1 and have an error with probability $\pi(x) < 0.5$. Any hypothesis that disagrees with this will output +1 and have an error of $1 - \pi(x) > 0.5$.
 \end{enumerate}
 
-\section*{Problem 3.16}
+\section*{Problem 6.1}
 \begin{enumerate}[label=(\alph*)]
-	\item The expected cost of something happening is equal to its cost multiplied by the probability of it happening. Fortunately, we are given both of those as logistic regression outputs probabilities from 0 to 1.
-	\\ \\ We only incur an accept cost if the algorithm was wrong on a specific data point $x$. The probability of this happening is $1 - g(x)$, because we computed $g(x)$ to be the probability of the person being correct. As a result, $cost(accept) = [1 - g(x)]c_a$.
-	\\ \\ Similarly, we only incur a reject cost if the algorithm was wrong on a specific data point. The probability of this happening is $g(x)$, because we computed $1 - g(x)$ to be the probability of the person being an intruder. As a result, $cost(reject) = g(x)c_r$.
-	\item We should put the threshold at the $g(x)$ value where the costs are equal. This is because if, for any of the data points, either of the costs is larger, we should clearly go with that option.
-	\begin{gather*}
-		cost(reject) = cost(accept)
-		\\ (1 - g(x)) c_a = g(x) c_r
-		\\ c_a - g(x) c_a = g(x) c_r
-		\\ g(x) (c_r + c_a) = c_a
-		\\ g(x) = \frac{c_a}{c_r + c_a}
-	\end{gather*}
-	\item For the Supermarket, $c_a = 1$ and $c_r = 10 \implies \kappa = \frac{c_a}{c_a + c_r} = \frac{1}{1 + 10} = \boldsymbol{\frac{1}{11}}$
-	\\ \\ For the CIA, $c_a = 1000$ and $c_r = 1 \implies \kappa = \frac{c_a}{c_a + c_r} = \frac{1000}{1000 + 1} = \boldsymbol{\frac{1000}{1001}}$
+	\item The following graph is what the 1-NN decision boundaries look like for the data set. It is a little difficult to make out individual points, but the circles within the colored regions are the actual data points.
+	
+	\includegraphics[scale=0.6]{6-1a1.png}
+	
+	Similarly, here is the graph for 3-NN decision boundaries. This may look somewhat surprising, but it occurs due to the blue +1 points being relatively far apart.
+	
+	\includegraphics[scale=0.6]{6-1a2.png}
+	\item Below is the 1-NN decision boundaries after the transform is performed.
+	
+	\includegraphics[scale=0.6]{6-1b1.png}
+	
+	Similarly, here are the boundaries for 3-NN.
+	
+	\includegraphics[scale=0.6]{6-1b2.png}
 \end{enumerate}
+
+\section*{Problem 6.4}
+\begin{enumerate}[label=(\alph*)]
+	\item Below is the graph for 1-NN for the decision boundaries of the points we gathered in Problem 3.1
+	
+	\includegraphics[scale=0.6]{6-4-1.png}
+	
+	Similarly, here is the graph for 3-NN for the same points. There is very marginal difference but the gains are huge in the VC-boundaries. (The biggest noticeable difference is on the left hand side, which is a little rockier with the 3-points)
+	
+	\includegraphics[scale=0.6]{6-4-2.png}
+\end{enumerate}
+
+\section*{Problem 6.16}
+\begin{enumerate}[label=(\alph*)]
+	\item After running the two algorithms on the randomly generated data, I got a run-time of \textbf{668.27 seconds} for the brute-force and a run-time of \textbf{145.25 seconds} for the branch and bound algorithm. Branch and bound allows us to disregard a large number of points (due to being able to ignore whole clusters) for a majority of the calculations. This cuts own significantly on run-time.
+	\item With the gaussian generated data, I got a run-time of \textbf{701.22 seconds} for the brute-force and a run-time of \textbf{551.27 seconds} for the branch and bound algorithm.
+	\item When the points aren't completely randomly thrown about, it becomes harder to use the clustering algorithm to improve performance. For instance, the following picture shows the distributions of the points within the clusters when the points are determined from Gaussians:
+	
+	\includegraphics[scale=0.6]{6-16-1.png}
+	
+	As you can see, most of the points find themselves in one of two clusters. The two main clusters therefore end up having large radii. Each nearest neighbor calculation then ends up requiring checking the majority of the points anyway. This somewhat defeats the purpose of the whole optimization in the first place.
+	\item It is not the number of points that should decide whether you use branch and bound or not, but rather how the points are distributed and how spread out you can expect them to be. If they are all going to end up in a couple clusters, you'll need either very precise center picks (the greedy algo may not suffice) or a lot more optimization.
+\end{enumerate}
+
 \end{document}
