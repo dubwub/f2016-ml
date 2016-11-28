@@ -1,8 +1,8 @@
 from decimal import Decimal
-# f = open('training.txt', 'r')
-# out = open('points.txt', 'w')
-f = open('test.txt', 'r')
-out = open('test_pts.txt', 'w')
+f = open('training.txt', 'r')
+out = open('points.txt', 'w')
+# f = open('test.txt', 'r')
+# out = open('test_pts.txt', 'w')
 ones_x = []
 ones_y = []
 other_x = []
