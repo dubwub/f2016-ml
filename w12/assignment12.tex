@@ -83,5 +83,28 @@
 	\item The kernel function as a classifier when written in functional form can really be boiled down to $h(x) = sign(x^3 - y)$ for any point (x, y).
 \end{enumerate}
 
+\section*{4. SVM with digits data}
+\begin{enumerate}[label=(\alph*)]
+	\item Below are the decision boundaries for the SVM being run with the 8th polynomial transform with a regularizer $C = 1.0$. It is a pretty solid boundary that has very decent error of \textbf{0.0616}.
+	
+	\includegraphics[scale=0.6]{4a1.png}
+	
+	Additionally, when regularization is bumped up to $C = 100.0$, here are the boundaries. This had a very good $E_{in}$ of \textbf{0.0491}.
+	
+	\includegraphics[scale=0.6]{4a2.png}
+	
+	\item With a higher C, you would expect (as shown above) the boundaries to be more complex. For instance, in the top graph there were quite a few red points in the blue region, but in the bottom graph the high power of the SVM was able to expertly dodge them. This lower $E_{in}$ trades off with generalization power, of course.
+	
+	\item After iterating over various values between 1.0 and 100.0, I found that the $E_{cv}$ was lowest at $C = 25$ with an $E_{cv}$ of \textbf{0.035} and an $E_{test}$ of \textbf{0.0491}. Below are the decision boundaries for this:
+	
+	\includegraphics[scale=0.6]{4a3.png}
+\end{enumerate}
+
+\section*{5. Compare Methods}
+The final test error after applying the straight linear model was $\boldsymbol{.0388}$. The 7-NN rule applied earlier had an $E_{test}$ of $\boldsymbol{0.027}$. The RBF-network returned a test error of $\boldsymbol{0.21}$. The neural net had an $E_{validation}$ of $\boldsymbol{0.055}$. The SVM had an $E_{test}$ of $\boldsymbol{0.0491}$.
+
+I would have the most confidence in the 7-NN rule, because it seems to have the most regularization applied. The linear model has a quite low error but it also uses an 8th polynomial transform. The RBF model had a wildly bad error, but that could've been implementation based. The neural net had decent error, but I suspect that 10 hidden units makes it a little out of control in terms of what it can do after two million iterations. The SVM had decent performance on the test set, but uses an 8th polynomial kernel which is also a little much, but given a small enough C we can try to keep it in check.
+
+Last thing to note is that there is of course data snooping present, because everything has been scaled from -1 to 1 regardless of whether it was in the test or training set.
 
 \end{document}
