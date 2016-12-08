@@ -100,6 +100,7 @@ np_y = np.matrix(y_matrix)
 # FIND MIN E_CV
 min_error = -1
 min_centers = []
+min_wreg = []
 max_error = 0
 min_k = 0
 errors = []
@@ -117,12 +118,9 @@ while k < 80:
 			data.append(gaussian)
 		RBF_matrix.append(data)
 	RBF_matrix = np.matrix(RBF_matrix)
-	# w = np.dot(np.dot(np.linalg.inv(np.dot(np.transpose(RBF_matrix), RBF_matrix)), np.transpose(RBF_matrix)), np_y)
-	# guess = np.dot(w, np_y)
-	# print np.dot(np.transpose(RBF_matrix), np.linalg.inv(np.dot(RBF_matrix, np.transpose(RBF_matrix)))).shape
-	# print RBF_matrix.shape
 	w = np.dot(np.transpose(np.dot(np.transpose(RBF_matrix), np.linalg.inv(np.dot(RBF_matrix, np.transpose(RBF_matrix))))), np.transpose(RBF_matrix))
-	# print w.shape
+	wreg = np.dot(np.transpose(np.dot(np.linalg.inv(np.dot(RBF_matrix, np.transpose(RBF_matrix))), RBF_matrix)), np_y)
+	# print wreg
 	guess = np.dot(w, np_y)
 	real_guess = []
 	for i in range(0, 300):
@@ -156,6 +154,7 @@ while k < 80:
 		min_centers = centers
 		min_error = ecv
 		min_k = k
+		min_wreg = wreg
 	print "k:", k, "min_error:", min_error, "min_k:", min_k
 	k += 1
 
@@ -163,6 +162,7 @@ for i in range(0, len(errors)):
 	errors[i] /= max_error
 
 print min_error, min_k
+print min_wreg
 
 # UNCOMMENT BELOW FOR ECV GRAPH
 kgraph, = plt.plot(ks, errors, 'bo', label='k')
